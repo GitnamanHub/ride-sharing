@@ -19,7 +19,7 @@ func main() {
 	mux.HandleFunc("POST /trip/preview", handleTripPreview)
 
 	server := &http.Server{
-		Addr: httpAddr,
+		Addr:    httpAddr,
 		Handler: mux,
 	}
 

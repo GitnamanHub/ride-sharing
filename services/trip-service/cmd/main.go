@@ -1,28 +1,31 @@
 package main
 
 import (
-	"context"
 	"log"
-	"ride-sharing/services/trip-service/internal/domain"
+	"net/http"
+	h "ride-sharing/services/trip-service/internal/infrastructure/http"
 	"ride-sharing/services/trip-service/internal/infrastructure/repository"
 	"ride-sharing/services/trip-service/internal/service"
-	"time"
 )
 
 func main() {
-	ctx := context.Background()
 	inmemRepo := repository.NewInmemRepository()
 	svc := service.NewService(inmemRepo)
-	fare := &domain.RideFareModel{
-		UserID: "42",
-	}
-	t, err := svc.CreateTrip(ctx, fare)
-	if err != nil {
-		log.Printf("failed to create trip: %v", err)
-	}
-	log.Printf("trip created: %v", t)
+	
+	mux := http.NewServeMux()
 
-	for {
-		time.Sleep(2 * time.Second)
+	httphandler := h.HttpHandler{
+		Service: svc,
 	}
+	mux.HandleFunc("POST /trip/preview", httphandler.HandleTripPreview)
+
+	server := &http.Server{
+		Addr:    ":8083",
+		Handler: mux,
+	}
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
+
 }

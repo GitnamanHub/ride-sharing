@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"ride-sharing/shared/contracts"
 )
 
 func handleTripPreview(w http.ResponseWriter, r *http.Request) {
@@ -13,9 +14,12 @@ func handleTripPreview(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	if reqBody.UserID != "" {
+	if reqBody.UserID == "" {
 		http.Error(w, "user_id is required", http.StatusBadRequest)
 		return
 	}
-	
+
+	response := contracts.APIResponse{Data: "ok"}
+
+	writeJSON(w, http.StatusCreated, response)
 }
