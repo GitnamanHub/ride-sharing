@@ -23,6 +23,6 @@ func main() {
 	log.Printf("trip created: %v", t)
 
 	for {
-		time.Sleep(1 * time.Second)
+		time.Sleep(2 * time.Second)
 	}
 }
