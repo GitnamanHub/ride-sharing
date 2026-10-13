@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"ride-sharing/shared/contracts"
+	"time"
 )
 
 func handleTripPreview(w http.ResponseWriter, r *http.Request) {
+	time.Sleep(9 * time.Second)
 	var reqBody previewTripRequest
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
